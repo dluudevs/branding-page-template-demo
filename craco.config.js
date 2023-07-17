@@ -1,6 +1,7 @@
 const CracoLessPlugin = require("craco-less");
 const antdTheme = require("./src/Themes/antd");
 const cracoModuleFederationPlugin = require("craco-mf");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   webpack: {
@@ -30,5 +31,6 @@ module.exports = {
       },
     },
     { plugin: cracoModuleFederationPlugin },
+    { plugin: new HtmlWebpackPlugin({ template: "./public/index.html" }) },
   ],
 };

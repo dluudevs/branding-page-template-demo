@@ -43,6 +43,7 @@
     "@craco/craco": "^7.1.0",
     "craco-less": "^3.0.1",
     "craco-mf": "^1.0.0",
+    "html-webpack-plugin": "^5.5.3",
     "sass": "^1.54.9"
   }
 }
