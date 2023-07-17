@@ -11,7 +11,6 @@ import { withCookies, Cookies } from "react-cookie";
 import styles from "./index.module.scss";
 import { namespace, ErrorMessager } from "../../ErrorMessages";
 import { Redirect } from "react-router-dom";
-// import { JOB_STATUS } from '../../Components/Layout/FilePanel/jobStatus';
 import { PORTAL_PREFIX, PLATFORM, SUPPORT_EMAIL } from "../../config";
 import { docs } from "../../externalLinks";
 import packageInfo from "../../../package.json";
@@ -27,14 +26,17 @@ class Auth extends Component {
       cookiesDrawer: false,
       notificationKey: null,
       btnLoading: false,
+      jobStatus: {},
     };
   }
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setTermsOfUse();
+    const { JOB_STATUS } = await import("portal/jobStatus");
+    this.setState({ jobStatus: JOB_STATUS });
   }
 
   componentWillUnmount() {
@@ -85,35 +87,34 @@ class Auth extends Component {
   };
 
   onFinish = async (values) => {
-    try {
-      await new Promise((resolve, reject) => {
-        const { uploadList, allCookies } = this.props;
-        const uploadingList = uploadList.filter(
-          // (item) => item.status === JOB_STATUS.RUNNING,
-          (item) => item.status === "RUNNING"
-        );
-        if (
-          uploadingList.length === 0 ||
-          allCookies.username === values.username
-        ) {
+    // try {
+    await new Promise((resolve, reject) => {
+      const { uploadList, allCookies } = this.props;
+      const uploadingList = uploadList.filter(
+        (item) => item.status === this.state.jobStatus.RUNNING,
+      );
+      if (
+        uploadingList.length === 0 ||
+        allCookies.username === values.username
+      ) {
+        resolve();
+        return;
+      }
+      confirm({
+        title: `Are you sure to log in as ${values.username}?`,
+        icon: <ExclamationCircleOutlined />,
+        content: `The file uploading is still in progress in another tab. Progress will be lost if you login as ${values.username}`,
+        onOk() {
           resolve();
-          return;
-        }
-        confirm({
-          title: `Are you sure to log in as ${values.username}?`,
-          icon: <ExclamationCircleOutlined />,
-          content: `The file uploading is still in progress in another tab. Progress will be lost if you login as ${values.username}`,
-          onOk() {
-            resolve();
-          },
-          onCancel() {
-            reject();
-          },
-        });
+        },
+        onCancel() {
+          reject();
+        },
       });
-    } catch (err) {
-      return;
-    }
+    });
+    // } catch (err) {
+    //   return;
+    // }
 
     this.setState({ btnLoading: true });
 
@@ -128,11 +129,7 @@ class Auth extends Component {
 
   render() {
     if (this.props.sessionIdCookie) {
-      if (isSafari) {
-        window.location.href = `${PORTAL_PREFIX}/landing`;
-      } else {
-        return <Redirect to="/landing" />;
-      }
+      window.location.href = `${PORTAL_PREFIX}/landing`;
     }
 
     return (
@@ -178,8 +175,9 @@ class Auth extends Component {
                   src={require("../../Images/PilotPoweredLogo.png")}
                 />
                 <div className={styles["descr-banner__text"]} style={{}}>
-                  Data management platform that enables researchers to store,
-                  find, access, analyse, and share their data.
+                  Branding Page Template Demo Data management platform that
+                  enables researchers to store, find, access, analyse, and share
+                  their data.
                 </div>
               </div>
             </div>
