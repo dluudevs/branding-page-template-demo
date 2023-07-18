@@ -176,9 +176,7 @@ class Auth extends Component {
                   src={require("../../Images/PilotPoweredLogo.png")}
                 />
                 <div className={styles["descr-banner__text"]} style={{}}>
-                  Branding Page Template Demo - Main Data management platform that
-                  enables researchers to store, find, access, analyse, and share
-                  their data.
+                  Branding Page Template Demo - Main Branch
                 </div>
               </div>
             </div>
