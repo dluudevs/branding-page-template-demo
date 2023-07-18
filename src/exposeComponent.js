@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Auth from "./Views/Login/Auth";
 
-export const mount = (node, props) => {
+export const mount = (containerId, props) => {
   const { keycloakLogin, sessionIdCookie, uploadList } = props;
 
   ReactDOM.render(
@@ -12,6 +12,6 @@ export const mount = (node, props) => {
       uploadList={uploadList}
       {...props}
     />,
-    node
+    document.getElementById(containerId)
   );
 };

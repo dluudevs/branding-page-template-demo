@@ -91,7 +91,8 @@ class Auth extends Component {
     await new Promise((resolve, reject) => {
       const { uploadList, allCookies } = this.props;
       const uploadingList = uploadList.filter(
-        (item) => item.status === this.state.jobStatus.RUNNING,
+        // (item) => item.status === this.state.jobStatus.RUNNING,
+        (item) => item.status === 'RUNNING',
       );
       if (
         uploadingList.length === 0 ||
