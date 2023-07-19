@@ -10,13 +10,9 @@ import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import styles from "./index.module.scss";
 import { namespace, ErrorMessager } from "../../ErrorMessages";
-import { Redirect } from "react-router-dom";
 import { PORTAL_PREFIX, PLATFORM, SUPPORT_EMAIL } from "../../config";
 import { docs } from "../../externalLinks";
 import packageInfo from "../../../package.json";
-const { detect } = require("detect-browser");
-const browser = detect();
-const isSafari = browser?.name === "safari";
 const { confirm } = Modal;
 
 class Auth extends Component {
