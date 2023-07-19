@@ -1,4 +1,4 @@
-const remotePortal = process.env.REACT_APP_REMOTE_MODULE_PILOT;
+const remotePortal = process.env.REACT_APP_REMOTE_MODULE_PILOT_URL;
 
 module.exports = {
   name: "branding",
