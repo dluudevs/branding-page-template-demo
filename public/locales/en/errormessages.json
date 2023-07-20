@@ -1,0 +1,14 @@
+{
+  "login": {
+    "400": [
+      "Your account has been disabled, please contact an administrator for assistance."
+    ],
+    "401": ["Your username and/or password do not match."],
+    "500": [
+      "Something went wrong while trying to login, please try again later. Error Code: 500"
+    ],
+    "default": [
+      "Something went wrong while trying to login, please try again later."
+    ]
+  }
+}

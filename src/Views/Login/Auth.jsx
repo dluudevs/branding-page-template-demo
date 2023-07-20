@@ -4,16 +4,16 @@
  * Contact Indoc Research for any questions regarding the use of this source code.
  */
 import React, { Component } from "react";
-import { Button, Modal, notification } from "antd";
+import { Button, Modal, notification, message } from "antd";
 import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import styles from "./index.module.scss";
-import { namespace, ErrorMessager } from "../../ErrorMessages";
 import { PORTAL_PREFIX, PLATFORM, SUPPORT_EMAIL } from "../../config";
 import { keycloak } from "../../Service/keycloak/config";
 import { docs } from "../../externalLinks";
 import packageInfo from "../../../package.json";
+import i18n from "../../i18n";
 const { confirm } = Modal;
 
 class Auth extends Component {
@@ -123,8 +123,7 @@ class Auth extends Component {
       .login({ redirectUri: window.location.origin + "/landing" })
       .catch((err) => {
         if (err.response) {
-          const errorMessager = new ErrorMessager(namespace.login.auth);
-          errorMessager.triggerMsg(err.response.status);
+          message.error(i18n.t(`errormessages:login.${err.response.status}.0`));
           this.setState({ btnLoading: false });
         }
       });
