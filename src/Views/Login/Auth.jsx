@@ -11,6 +11,7 @@ import { withCookies, Cookies } from "react-cookie";
 import styles from "./index.module.scss";
 import { namespace, ErrorMessager } from "../../ErrorMessages";
 import { PORTAL_PREFIX, PLATFORM, SUPPORT_EMAIL } from "../../config";
+import { keycloak } from "../../Service/keycloak/config";
 import { docs } from "../../externalLinks";
 import packageInfo from "../../../package.json";
 const { confirm } = Modal;
@@ -83,49 +84,54 @@ class Auth extends Component {
   };
 
   onFinish = async (values) => {
-    // try {
-    await new Promise((resolve, reject) => {
-      const { uploadList, allCookies } = this.props;
-      const uploadingList = uploadList.filter(
-        // (item) => item.status === this.state.jobStatus.RUNNING,
-        (item) => item.status === 'RUNNING',
-      );
-      if (
-        uploadingList.length === 0 ||
-        allCookies.username === values.username
-      ) {
-        resolve();
-        return;
-      }
-      confirm({
-        title: `Are you sure to log in as ${values.username}?`,
-        icon: <ExclamationCircleOutlined />,
-        content: `The file uploading is still in progress in another tab. Progress will be lost if you login as ${values.username}`,
-        onOk() {
+    try {
+      await new Promise((resolve, reject) => {
+        const uploadList = JSON.parse(
+          localStorage.getItem("portal-uploadList")
+        );
+        const uploadingList = uploadList.filter(
+          // (item) => item.status === this.state.jobStatus.RUNNING,
+          (item) => item.status === "RUNNING"
+        );
+        if (
+          uploadingList.length === 0 ||
+          this.props.allCookies.username === values.username
+        ) {
           resolve();
-        },
-        onCancel() {
-          reject();
-        },
+          return;
+        }
+        confirm({
+          title: `Are you sure to log in as ${values.username}?`,
+          icon: <ExclamationCircleOutlined />,
+          content: `The file uploading is still in progress in another tab. Progress will be lost if you login as ${values.username}`,
+          onOk() {
+            resolve();
+          },
+          onCancel() {
+            reject();
+          },
+        });
       });
-    });
-    // } catch (err) {
-    //   return;
-    // }
+    } catch (err) {
+      return;
+    }
 
     this.setState({ btnLoading: true });
 
-    this.props.keycloakLogin().catch((err) => {
-      if (err.response) {
-        const errorMessager = new ErrorMessager(namespace.login.auth);
-        errorMessager.triggerMsg(err.response.status);
-        this.setState({ btnLoading: false });
-      }
-    });
+    await keycloak.init({ checkLoginIframe: false });
+    keycloak
+      .login({ redirectUri: window.location.origin + "/landing" })
+      .catch((err) => {
+        if (err.response) {
+          const errorMessager = new ErrorMessager(namespace.login.auth);
+          errorMessager.triggerMsg(err.response.status);
+          this.setState({ btnLoading: false });
+        }
+      });
   };
 
   render() {
-    if (this.props.sessionIdCookie) {
+    if (this.props.allCookies?.sessionId) {
       window.location.href = `${PORTAL_PREFIX}/landing`;
     }
 
