@@ -90,8 +90,7 @@ class Auth extends Component {
           localStorage.getItem("portal-uploadList")
         );
         const uploadingList = uploadList.filter(
-          // (item) => item.status === this.state.jobStatus.RUNNING,
-          (item) => item.status === "RUNNING"
+          (item) => item.status === this.state.jobStatus.RUNNING,
         );
         if (
           uploadingList.length === 0 ||
@@ -130,8 +129,8 @@ class Auth extends Component {
   };
 
   render() {
-    if (this.props.allCookies?.sessionId) {
-      window.location.href = `${PORTAL_PREFIX}/landing`;
+    if (this.props.allCookies?.sessionId && this.props.containerId) {
+      window.location.href = `${PORTAL_PREFIX}/landing`; // only redirect if being mounted by a container
     }
 
     return (
