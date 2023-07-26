@@ -177,7 +177,7 @@ class Auth extends Component {
                   src={require("../../Images/PilotPoweredLogo.png")}
                 />
                 <div className={styles["descr-banner__text"]} style={{}}>
-                  Branding Page Template Demo - Main Branch.
+                  Branding Page Template Demo - Main Branch. My updated change.
                 </div>
               </div>
             </div>
