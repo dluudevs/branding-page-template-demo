@@ -32,8 +32,8 @@ class Auth extends Component {
 
   async componentDidMount() {
     this.setTermsOfUse();
-    const { JOB_STATUS } = await import("portal/jobStatus");
-    this.setState({ jobStatus: JOB_STATUS });
+    // const { JOB_STATUS } = await import("portal/jobStatus");
+    // this.setState({ jobStatus: JOB_STATUS });
   }
 
   componentWillUnmount() {
@@ -90,7 +90,8 @@ class Auth extends Component {
           localStorage.getItem("portal-uploadList")
         );
         const uploadingList = uploadList.filter(
-          (item) => item.status === this.state.jobStatus.RUNNING,
+          // (item) => item.status === this.state.jobStatus.RUNNING,
+          (item) => item.status === 'RUNNING',
         );
         if (
           uploadingList.length === 0 ||
@@ -176,7 +177,7 @@ class Auth extends Component {
                   src={require("../../Images/PilotPoweredLogo.png")}
                 />
                 <div className={styles["descr-banner__text"]} style={{}}>
-                  Branding Page Template Demo - Main Branch
+                  Branding Page Template Demo - Tenant A
                 </div>
               </div>
             </div>
